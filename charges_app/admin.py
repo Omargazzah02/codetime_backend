@@ -14,7 +14,14 @@ class ChargeAdmin(admin.ModelAdmin):
     search_fields = ('title',)  # optional: add a search box on titles
     ordering = ('-date_creation',)  # optional: newest first
 
-admin.site.register(PropertyCharge)
+
+
+@admin.register(PropertyCharge)
+class PropertyChargeAdmin(admin.ModelAdmin):
+    list_display = ("charge", "property", "part")
+    list_filter = ("charge", "property__residence")
+    search_fields = ("charge__title", "property__property_number", "property__property_type")
+    autocomplete_fields = ("charge", "property")  # Helpful if many entries
 
 
 @admin.register(ChargePrediction)

@@ -55,18 +55,19 @@ SIMPLE_JWT = {
 
 # Application definition
 INSTALLED_APPS = [
-    'charges_app',
-    'documents_app',
-    'corsheaders',  # Assurez-vous que corsheaders est bien installé
-    'properties_app',
-    'auth_app',
-    'residences_app',
+    'jazzmin',                
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'charges_app',
+    'documents_app',
+    'corsheaders', 
+    'properties_app',
+    'auth_app',
+    'residences_app',
     'interventions',
 ]
 
@@ -165,4 +166,53 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'testsyndic7@gmail.com'
 EMAIL_HOST_PASSWORD = 'ykcilosikeesfade'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Syndic Admin",
+    "site_header": "Syndic Dashboard",
+    "site_brand": "Syndicna",
+    "welcome_sign": "Welcome to the Syndic Admin Panel",
+    "site_logo": "images/logo_Syndicna.png",        # logo in the navbar
+    "login_logo": "images/logo_Syndicna.png",  
+    "site_logo_classes": "img-circle",  # Optional: round style
+
+    "user_avatar": None,  # Set to None if you don’t have user profile pics
+
+    # Dark mode settings
+    "theme": "darkly",  # 👈 Available dark themes: darkly, cyborg, slate, etc.
+
+    # Optional extras
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    "icons": {
+        # Auth / Users
+        "auth_app.CustomUser": "fas fa-user-shield",
+        "auth_app.UserLoginHistory": "fas fa-history",         # User login histories
+        "auth_app.UserLoginPrediction": "fas fa-chart-line",   # User login predictions
+
+        # Charges_App
+        "Charges_App.ChargePrediction": "fas fa-chart-bar",    # Charge predictions
+        "Charges_App.Charge": "fas fa-file-invoice-dollar",
+        "Charges_App.PropertyCharge": "fas fa-home",           # Property charges
+
+        # Documents_App
+        "Documents_App.Document": "fas fa-file-alt",            # Documents
+        "Documents_App.Invoice": "fas fa-file-invoice",         # Invoices
+
+        # Interventions
+        "interventions.Intervention": "fas fa-tools",          # Interventions (existing)
+
+        # Properties_App
+        "Properties_App.Property": "fas fa-building",           # Properties
+
+        # Residences_App
+        "Residences_App.Residence": "fas fa-city",              # Residences
+    },
+
+
+    "custom_css": "css/admin_custom.css",
+}
+
 
