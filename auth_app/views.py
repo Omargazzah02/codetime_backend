@@ -8,11 +8,11 @@ from rest_framework import status
 from .serializers import UserSerializer
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.contrib.auth.signals import user_logged_in  # 👈 import the signal
+from django.contrib.auth.signals import user_logged_in  
 
 from .models import UserLoginHistory
-from .predictor import update_user_prediction  # 👈 Make sure this is imported
-from django.utils.timezone import now  # optional if you want to set timestamp
+from .predictor import update_user_prediction  
+from django.utils.timezone import now  
 
 
 
@@ -34,10 +34,8 @@ class LoginView(APIView):
         if user is None:
             return Response({'error': 'Nom d\'utilisateur ou mot de passe incorrect.'}, status=400)
 
-        # 🔐 Save login history
         UserLoginHistory.objects.create(user=user)
 
-        # 🤖 Trigger prediction update for this user
         update_user_prediction(user)
 
         try:
@@ -52,7 +50,7 @@ class LoginView(APIView):
 
 
 class ModifyPasswordView(APIView):
-    permission_classes = [IsAuthenticated,IsOwner]  # Or your custom IsOwner permission
+    permission_classes = [IsAuthenticated,IsOwner]  
 
     def put(self, request):
         old_password = request.data.get("old_password")
@@ -85,21 +83,18 @@ class UpdateProfileView(APIView):
         user = request.user
         data = request.data
 
-        # Extract fields from request
         username = data.get("username")
         email = data.get("email")
         phone = data.get("phone")
         first_name = data.get("first_name")
         last_name = data.get("last_name")
 
-        # Optional: validate required fields
         if not username or  not email:
             return Response(
                 {"error": "First name, last name, and email are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Update user fields
         user.username = username
         user.email = email
         user.phone = phone 

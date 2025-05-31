@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from residences_app.models import Residence  # Assuming you have this app
+from residences_app.models import Residence  
 
 class Intervention(models.Model):
     INTERVENTION_CHOICES = [

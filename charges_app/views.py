@@ -20,7 +20,6 @@ from .predictor import predict_next_month_charges
 from .models import ChargePrediction
 
 
-#  Create your views here.
 
 class ChargesListView(generics.ListAPIView) :
     permission_classes = [IsAuthenticated , IsOwner]
@@ -134,25 +133,21 @@ class UpdateChargeView(APIView):
     permission_classes = [IsAuthenticated, IsManager]
     
     def patch(self, request, residence_id, charge_id):
-        # Check if residence exists
         try:
             residence = Residence.objects.get(id=residence_id)
         except Residence.DoesNotExist:
             return Response({"error": "Cette résidence n'existe pas."}, status=status.HTTP_404_NOT_FOUND)
         
-        # Verify user is a manager of this residence
         managers = residence.managers.all()
         exists = managers.filter(id=request.user.id).exists()
         if not exists:
             return Response({"error": "Vous n'êtes pas un manager dans cette résidence."}, status=status.HTTP_401_UNAUTHORIZED)
         
-        # Check if charge exists and belongs to the residence
         try:
             charge = Charge.objects.get(id=charge_id, residence=residence)
         except Charge.DoesNotExist:
             return Response({"error": "Cette charge n'existe pas ou n'appartient pas à cette résidence."}, status=status.HTTP_404_NOT_FOUND)
         
-        # Update charge fields from request data
         charge_title = request.data.get('charge_title')
         charge_price = request.data.get('charge_price')
         charge_category = request.data.get('charge_category')
@@ -168,10 +163,8 @@ class UpdateChargeView(APIView):
             
         charge.save()
         
-        # Handle PDF file if provided
         pdf_file = request.FILES.get('pdf_file')
         if pdf_file is not None:
-            # Create new invoice for the updated charge
             Invoice.objects.create(
                 residence=residence,
                 category="Invoice",
@@ -182,7 +175,6 @@ class UpdateChargeView(APIView):
             
         return Response({"message": "Vous avez bien mis à jour la charge avec succès."}, status=status.HTTP_200_OK)
         
-    # Support PUT method as well
     def put(self, request, residence_id, charge_id):
         return self.patch(request, residence_id, charge_id)
        
@@ -208,12 +200,10 @@ class PredictChargesView(APIView):
         except FileNotFoundError as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        # Get year/month for storage
         today = datetime.today()
         next_month = today.replace(day=1) + timedelta(days=32)
         year, month = next_month.year, next_month.month
 
-        # Save to DB
         saved = []
         for category, price in predictions.items():
             pred, created = ChargePrediction.objects.update_or_create(

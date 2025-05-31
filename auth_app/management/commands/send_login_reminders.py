@@ -10,19 +10,19 @@ class Command(BaseCommand):
         today = timezone.now().date()
         #tomorrow = today + datetime.timedelta(days=1)
         #day_name = tomorrow.strftime('%A') 
-        day_name = today.strftime('%A')  # ✅ Today’s day name (e.g., 'Wednesday')
+        day_name = today.strftime('%A')  
 
         users_to_notify = UserLoginPrediction.objects.filter(predicted_day=day_name)
 
         for prediction in users_to_notify:
             user = prediction.user
             if not user.email:
-                continue  # Skip if no email
+                continue  
 
             send_mail(
                 subject='🕒 Connexion prévue aujourd\'hui',
                 message=f"Bonjour {user.username}, vous êtes censé vous connecter aujourd'hui ({day_name}).",
-                from_email=None,  # Uses DEFAULT_FROM_EMAIL from settings.py
+                from_email=None,  
                 recipient_list=[user.email],
                 fail_silently=False
             )

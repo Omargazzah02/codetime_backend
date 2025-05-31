@@ -32,8 +32,7 @@ class CustomUser(AbstractUser):
 
 
     def save(self, *args, **kwargs):
-        # Si l'utilisateur a un mot de passe non haché, on le hache ici
-        self.full_clean()  # Appelle clean() automatiquement
+        self.full_clean()  
         if self.password and not self.password.startswith('pbkdf2_'):
            self.password = make_password(self.password)
 
@@ -43,7 +42,6 @@ class CustomUser(AbstractUser):
             self.role = 'admin'
             self.is_staff = True
 
-        # Appel à la méthode save de la classe parente
         super().save(*args, **kwargs)
 
     def is_owner(self):

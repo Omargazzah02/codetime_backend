@@ -30,8 +30,8 @@ class Charge (models.Model) :
        
         return self.title
     def save(self , *args, **kwargs)  :
-         is_new = self.pk is None  # On vérifie si c'est une création
-         super().save(*args, **kwargs)  # D'abord on sauvegarde la Charge elle-même
+         is_new = self.pk is None 
+         super().save(*args, **kwargs) 
 
          if not is_new:
            self.properties.all().delete()
